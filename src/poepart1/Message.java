@@ -95,7 +95,7 @@ public class Message {
             //  JSON file
             String filename = "messages/message_" + messageID + ".json";
             try (FileWriter file = new FileWriter(filename)) {
-                file.write(messageJson.toString(4)); // 4 spaces for indentation
+                file.write(messageJson.toString(4)); // 4 spaces
                 file.flush();
             }
             
