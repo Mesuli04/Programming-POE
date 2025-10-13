@@ -78,7 +78,7 @@ public class Message {
         return messageCount;
     }
 
-    // FIXED: Changed return type from void to String
+    
     public String storeMessage() {
         try {
             JSONObject messageJson = new JSONObject();
@@ -92,16 +92,16 @@ public class Message {
             //messages directory
             Files.createDirectories(Paths.get("messages"));
             
-            // Save to JSON file
+            //  JSON file
             String filename = "messages/message_" + messageID + ".json";
             try (FileWriter file = new FileWriter(filename)) {
                 file.write(messageJson.toString(4)); // 4 spaces for indentation
                 file.flush();
             }
             
-            return "Message stored successfully in " + filename; // Now returns String
+            return "Message stored successfully in " + filename; 
         } catch (IOException e) {
-            return "Error storing message: " + e.getMessage(); // Now returns String
+            return "Error storing message: " + e.getMessage(); 
         }
     }
 

@@ -60,7 +60,7 @@ public class POEPART1 {
         String loginPassword = scanner.nextLine();
         
         String loginResult = userLogin.returnLoginStatus(loginUsername, loginPassword);
-        System.out.println("\nResult:");
+        System.out.println("\n***************:");
         System.out.println(loginResult);
         
         if (loginResult.contains("Welcome")) {
@@ -139,7 +139,7 @@ public class POEPART1 {
             return;
         }
         
-        // Show message options: Send, Store, Disregard
+        
         String[] messageOptions = {"Send Message", "Store Message", "Disregard Message"};
         int option = JOptionPane.showOptionDialog(null,
             "Message created successfully!\n\n" + message.printMessage() + 
