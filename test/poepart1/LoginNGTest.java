@@ -1,8 +1,20 @@
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+
 package poepart1;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
 import org.testng.Assert;
+
+/**
+ *
+ * @author RC_Student_Lab
+ */
 
 
 public class LoginNGTest {
