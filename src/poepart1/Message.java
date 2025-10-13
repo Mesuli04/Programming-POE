@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -5,7 +6,15 @@
 
 package poepart1;
 
-import java.util.Random;
+import java.util.Random;//generating message id
+import org.json.JSONObject;//json
+import java.io.FileWriter;//files management
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author RC_Student_Lab
@@ -17,6 +26,7 @@ public class Message {
     private String messageHash;
     private static int messageCount = 0;
     private int messageNumber;
+    private String timestamp;
 
     public Message(String recipient, String message) {
         this.messageID = generateMessageID();
@@ -24,6 +34,7 @@ public class Message {
         this.message = message;
         this.messageNumber = ++messageCount;
         this.messageHash = createMessageHash();
+        this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public boolean checkMessageID() {
@@ -59,16 +70,39 @@ public class Message {
         return "MessageID: " + messageID + "\n" +
                "Message Hash: " + messageHash + "\n" +
                "Recipient: " + recipient + "\n" +
-               "Message: " + message;
+               "Message: " + message + "\n" +
+               "Timestamp: " + timestamp;
     }
 
     public static int returnTotalMessages() {
         return messageCount;
     }
 
-    public void storeMessage() {
-        // JSON storage functionality would be implemented here
-        // Using ChatGPT for JSON implementation as per requirements
+    // FIXED: Changed return type from void to String
+    public String storeMessage() {
+        try {
+            JSONObject messageJson = new JSONObject();
+            messageJson.put("messageID", messageID);
+            messageJson.put("recipient", recipient);
+            messageJson.put("message", message);
+            messageJson.put("messageHash", messageHash);
+            messageJson.put("messageNumber", messageNumber);
+            messageJson.put("timestamp", timestamp);
+            
+            //messages directory
+            Files.createDirectories(Paths.get("messages"));
+            
+            // Save to JSON file
+            String filename = "messages/message_" + messageID + ".json";
+            try (FileWriter file = new FileWriter(filename)) {
+                file.write(messageJson.toString(4)); // 4 spaces for indentation
+                file.flush();
+            }
+            
+            return "Message stored successfully in " + filename; // Now returns String
+        } catch (IOException e) {
+            return "Error storing message: " + e.getMessage(); // Now returns String
+        }
     }
 
     private String generateMessageID() {
@@ -85,4 +119,5 @@ public class Message {
     public String getMessage() { return message; }
     public String getMessageHash() { return messageHash; }
     public int getMessageNumber() { return messageNumber; }
+    public String getTimestamp() { return timestamp; }
 }

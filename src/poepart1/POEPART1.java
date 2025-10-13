@@ -5,7 +5,6 @@
 package poepart1;
 
 import java.util.Scanner;
-import java.util.Scanner;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -19,7 +18,7 @@ public class POEPART1 {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Message> messages = new ArrayList<>();
         
-        System.out.println("== Registration and Login ==");
+        System.out.println("==Registration and Login==");
         
         System.out.print("Hi, enter your first name: ");
         String firstName = scanner.nextLine();
@@ -32,7 +31,7 @@ public class POEPART1 {
         boolean registrationSuccessful = false;
         
         while (!registrationSuccessful) {
-            System.out.println("\n== REGISTRATION ==");
+            System.out.println("\n==Registration==");
             System.out.print("Enter username (must contain '_' and 5 characters max): ");
             String username = scanner.nextLine();
             
@@ -53,7 +52,7 @@ public class POEPART1 {
             }
         }
         
-        System.out.println("\n=== LOGIN ===");
+        System.out.println("\n===LOGIN===");
         System.out.print("Enter username: ");
         String loginUsername = scanner.nextLine();
         
@@ -70,77 +69,115 @@ public class POEPART1 {
         
         scanner.close();
     }
-    
-    private static void runMessagingApp(Scanner scanner, ArrayList<Message> messages) {
-        System.out.println("\nWelcome to QuickChat.");
+      private static void runMessagingApp(Scanner scanner, ArrayList<Message> messages) {
+        JOptionPane.showMessageDialog(null, "Welcome to QuickChat.");
         
-        System.out.print("How many messages do you wish to send? ");
-        int maxMessages = scanner.nextInt();
-        scanner.nextLine();
+        String maxMessagesInput = JOptionPane.showInputDialog("How many messages do you wish to send?");
+        int maxMessages = Integer.parseInt(maxMessagesInput);
         
         int messagesSent = 0;
+        boolean running = true;
         
-        while (messagesSent < maxMessages) {
-            System.out.println("\n=== MENU ===");
-            System.out.println("1) Send Messages");
-            System.out.println("2) Show recently sent messages");
-            System.out.println("3) Quit");
-            System.out.print("Choose an option: ");
-            
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+        while (running && messagesSent < maxMessages) {
+            String[] options = {"Send Messages", "Show recently sent messages", "Quit"};
+            int choice = JOptionPane.showOptionDialog(null,
+                "=== MENU ===\nMessages sent: " + messagesSent + "/" + maxMessages,
+                "QuickChat Menu",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]);
             
             switch (choice) {
-                case 1:
+                case 0: // Send Messages
                     if (messagesSent < maxMessages) {
-                        sendMessage(scanner, messages);
+                        sendMessageWithOptions(messages);
                         messagesSent++;
                     } else {
-                        System.out.println("You have reached your message limit.");
+                        JOptionPane.showMessageDialog(null, "You have reached your message limit.");
                     }
                     break;
                     
-                case 2:
-                    System.out.println("Coming Soon.");
+                case 1: // Show recently sent messages
+                    JOptionPane.showMessageDialog(null, "Coming Soon.");
                     break;
                     
-                case 3:
-                    System.out.println("Total messages sent: " + Message.returnTotalMessages());
-                    System.out.println("Goodbye!");
-                    return;
+                case 2: // Quit
+                case -1: // Close button
+                    running = false;
+                    break;
                     
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    JOptionPane.showMessageDialog(null, "Invalid option. Please try again.");
             }
         }
         
-        System.out.println("You have sent all " + maxMessages + " messages.");
-        System.out.println("Total messages accumulated: " + Message.returnTotalMessages());
+        if (messagesSent >= maxMessages) {
+            JOptionPane.showMessageDialog(null, 
+                "You have sent all " + maxMessages + " messages.\n" +
+                "Total messages accumulated: " + Message.returnTotalMessages());
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "Goodbye!\n" +
+                "Total messages sent: " + Message.returnTotalMessages());
+        }
     }
     
-    private static void sendMessage(Scanner scanner, ArrayList<Message> messages) {
-        System.out.print("Enter recipient's cell number (with international code +27): ");
-        String recipient = scanner.nextLine();
+    private static void sendMessageWithOptions(ArrayList<Message> messages) {
+        String recipient = JOptionPane.showInputDialog("Enter recipient's cell number (with international code +27):");
+        if (recipient == null) return; // User cancelled
         
-        System.out.print("Enter your message (max 250 characters): ");
-        String messageText = scanner.nextLine();
+        String messageText = JOptionPane.showInputDialog("Enter your message (max 250 characters):");
+        if (messageText == null) return; // User cancelled
         
         Message message = new Message(recipient, messageText);
-        String sendResult = message.sentMessage();
+        String validationResult = message.sentMessage();
         
-        if (sendResult.equals("Message sent")) {
-            messages.add(message);
-            System.out.println("Message sent successfully!");
-            
-            JOptionPane.showMessageDialog(null, 
-                message.printMessage(),
-                "Message Details",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (!validationResult.equals("Message sent")) {
+            JOptionPane.showMessageDialog(null, validationResult);
+            return;
+        }
+        
+        // Show message options: Send, Store, Disregard
+        String[] messageOptions = {"Send Message", "Store Message", "Disregard Message"};
+        int option = JOptionPane.showOptionDialog(null,
+            "Message created successfully!\n\n" + message.printMessage() + 
+            "\n\nWhat would you like to do with this message?",
+            "Message Options",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            messageOptions,
+            messageOptions[0]);
+        
+        switch (option) {
+            case 0: // Send Message
+                messages.add(message);
+                JOptionPane.showMessageDialog(null, 
+                    "Message sent successfully!\n\n" + message.printMessage(),
+                    "Message Sent",
+                    JOptionPane.INFORMATION_MESSAGE);
+                break;
                 
-            System.out.println("\nMessage Details:");
-            System.out.println(message.printMessage());
-        } else {
-            System.out.println(sendResult);
+            case 1: // Store Message
+                String storeResult = message.storeMessage();
+                JOptionPane.showMessageDialog(null, 
+                    storeResult + "\n\n" + message.printMessage(),
+                    "Message Stored",
+                    JOptionPane.INFORMATION_MESSAGE);
+                break;
+                
+            case 2: // Disregard Message
+                JOptionPane.showMessageDialog(null, 
+                    "Message disregarded.",
+                    "Message Disregarded",
+                    JOptionPane.INFORMATION_MESSAGE);
+                break;
+                
+            case -1: // Closed dialog
+                JOptionPane.showMessageDialog(null, "Message cancelled.");
+                break;
         }
     }
 }
