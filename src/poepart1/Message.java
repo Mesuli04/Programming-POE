@@ -104,7 +104,7 @@ public class Message {
             return "Error storing message: " + e.getMessage(); 
         }
     }
-
+//generating ID
     private String generateMessageID() {
         Random rand = new Random();
         StringBuilder id = new StringBuilder();
