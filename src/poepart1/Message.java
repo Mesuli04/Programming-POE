@@ -131,4 +131,8 @@ public class Message {
     public void setMessageHash(String messageHash) {
     this.messageHash = messageHash;
 }
+
+    public void setTimestamp(String timestamp) {
+    this.timestamp = timestamp;
+}
 }

@@ -70,61 +70,84 @@ public class POEPART1 {
         scanner.close();
     }
       private static void runMessagingApp(Scanner scanner, ArrayList<Message> messages) {
-        JOptionPane.showMessageDialog(null, "Welcome to QuickChat.");
+    JOptionPane.showMessageDialog(null, "Welcome to QuickChat.");
+    
+    String maxMessagesInput = JOptionPane.showInputDialog("How many messages do you wish to send?");
+    int maxMessages = Integer.parseInt(maxMessagesInput);
+    
+    int messagesSent = 0;
+    boolean running = true;
+    
+    while (running && messagesSent < maxMessages) {
+        String[] options = {
+            "Send Messages", 
+            "Show recently sent messages", 
+            "Message Helper Features",  // Add this option
+            "Quit"
+        };
         
-        String maxMessagesInput = JOptionPane.showInputDialog("How many messages do you wish to send?");
-        int maxMessages = Integer.parseInt(maxMessagesInput);
+        int choice = JOptionPane.showOptionDialog(null,
+            "=== QUICKCHAT MENU ===\nMessages sent: " + messagesSent + "/" + maxMessages,
+            "QuickChat",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.INFORMATION_MESSAGE,
+            null,
+            options,
+            options[0]);
         
-        int messagesSent = 0;
-        boolean running = true;
-        
-        while (running && messagesSent < maxMessages) {
-            String[] options = {"Send Messages", "Show recently sent messages","Message Helper Features", "Quit"};
-            int choice = JOptionPane.showOptionDialog(null,
-                "=== MENU ===\nMessages sent: " + messagesSent + "/" + maxMessages,
-                "QuickChat Menu",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                options[0]);
-            
-            switch (choice) {
-                case 0: // Send Messages
-                    if (messagesSent < maxMessages) {
-                        sendMessageWithOptions(messages);
-                        messagesSent++;
-                    } else {
-                        JOptionPane.showMessageDialog(null, "You have reached your message limit.");
-                    }
-                    break;
-                    
-                case 1: // Show recently sent messages
-                    JOptionPane.showMessageDialog(null, "Coming Soon.");
-                    break;
-                    
-               case 2: // Message Helper Features
-                     MessageHelper messageHelper = new MessageHelper();
-                     messageHelper.showMessageHelperMenu();
-                    break;
-                case -1: // Close button
-                    running = false;
-                    break;
-                    
-                default:
-                    JOptionPane.showMessageDialog(null, "Invalid option. Please try again.");
-            }
+        switch (choice) {
+            case 0: // Send Messages
+                if (messagesSent < maxMessages) {
+                    sendMessageWithOptions(messages);
+                    messagesSent++;
+                } else {
+                    JOptionPane.showMessageDialog(null, "You have reached your message limit.");
+                }
+                break;
+                
+            case 1: // Show recently sent messages
+                showRecentlySentMessages(messages);
+                break;
+                
+            case 2: // Message Helper Features
+                MessageHelper messageHelper = new MessageHelper(messages);
+                messageHelper.showMessageHelperMenu();
+                break;
+                
+            case 3: // Quit
+            case -1: // Close button
+                running = false;
+                break;
+                
+            default:
+                JOptionPane.showMessageDialog(null, "Invalid option. Please try again.");
         }
-        
-        if (messagesSent >= maxMessages) {
-            JOptionPane.showMessageDialog(null, 
-                "You have sent all " + maxMessages + " messages.\n" +
-                "Total messages accumulated: " + Message.returnTotalMessages());
-        } else {
-            JOptionPane.showMessageDialog(null, 
-                "Goodbye!\n" +
-                "Total messages sent: " + Message.returnTotalMessages());
-        }
+    }
+    
+   
+}
+
+private static void showRecentlySentMessages(ArrayList<Message> messages) {
+    if (messages.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "No messages sent yet.");
+        return;
+    }
+    
+    StringBuilder recentMessages = new StringBuilder();
+    recentMessages.append("=== RECENTLY SENT MESSAGES ===\n\n");
+    
+    int count = Math.min(messages.size(), 5); // Show last 5 messages
+    for (int i = messages.size() - 1; i >= Math.max(0, messages.size() - count); i--) {
+        Message msg = messages.get(i);
+        recentMessages.append("To: ").append(msg.getRecipient()).append("\n");
+        recentMessages.append("Message: ").append(msg.getMessage()).append("\n");
+        recentMessages.append("Time: ").append(msg.getTimestamp()).append("\n");
+        recentMessages.append("------------------------\n");
+    }
+    
+    recentMessages.append("Total messages: ").append(messages.size());
+    
+    JOptionPane.showMessageDialog(null, recentMessages.toString());
     }
     
     private static void sendMessageWithOptions(ArrayList<Message> messages) {
