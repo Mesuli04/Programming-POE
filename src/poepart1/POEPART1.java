@@ -79,7 +79,7 @@ public class POEPART1 {
         boolean running = true;
         
         while (running && messagesSent < maxMessages) {
-            String[] options = {"Send Messages", "Show recently sent messages", "Quit"};
+            String[] options = {"Send Messages", "Show recently sent messages","Message Helper Features", "Quit"};
             int choice = JOptionPane.showOptionDialog(null,
                 "=== MENU ===\nMessages sent: " + messagesSent + "/" + maxMessages,
                 "QuickChat Menu",
@@ -103,7 +103,10 @@ public class POEPART1 {
                     JOptionPane.showMessageDialog(null, "Coming Soon.");
                     break;
                     
-                case 2: // Quit
+               case 2: // Message Helper Features
+                     MessageHelper messageHelper = new MessageHelper();
+                     messageHelper.showMessageHelperMenu();
+                    break;
                 case -1: // Close button
                     running = false;
                     break;

@@ -120,4 +120,15 @@ public class Message {
     public String getMessageHash() { return messageHash; }
     public int getMessageNumber() { return messageNumber; }
     public String getTimestamp() { return timestamp; }
+    public void setFlag(String flag) {
+   
+}
+
+    public void setMessageID(String messageID) {
+    this.messageID = messageID;
+}
+
+    public void setMessageHash(String messageHash) {
+    this.messageHash = messageHash;
+}
 }
