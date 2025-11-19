@@ -16,12 +16,10 @@ public class MessageHelper {
     private ArrayList<String> messageHash;
     private ArrayList<String> messageID;
     
-    // Reference to the main messages list from the application
+
     private ArrayList<Message> userMessages;
     
-    /**
-     * Constructor that takes the actual user messages from the main application
-     */
+    
     public MessageHelper(ArrayList<Message> userMessages) {
         this.userMessages = userMessages;
         this.sentMessages = new ArrayList<>();
@@ -30,27 +28,21 @@ public class MessageHelper {
         this.messageHash = new ArrayList<>();
         this.messageID = new ArrayList<>();
         
-        // Populate arrays with actual user data
+       
         populateArraysFromUserMessages();
         loadStoredMessagesFromFiles();
     }
     
-    /**
-     * Populates arrays with actual messages from the user's messaging activity
-     */
+   
     private void populateArraysFromUserMessages() {
-        // Since we don't have a flag system in the original Message class,
-        // we'll consider all messages in userMessages as sent messages
-        // and also load stored messages from JSON files
+       
         
         for (Message message : userMessages) {
             addToSentMessages(message);
         }
     }
     
-    /**
-     * Loads stored messages from JSON files in the messages directory
-     */
+  
     private void loadStoredMessagesFromFiles() {
         try {
             File messagesDir = new File("messages");
@@ -72,7 +64,7 @@ public class MessageHelper {
                                 }
                             }
                             
-                            // Only add if not already in sent messages
+                            
                             if (!alreadyInSent) {
                                 Message storedMsg = new Message(
                                     json.getString("recipient"),
@@ -95,7 +87,7 @@ public class MessageHelper {
         }
     }
     
-    // Methods to add messages to respective arrays
+    // Methods to add messages
     private void addToSentMessages(Message message) {
         sentMessages.add(message);
         if (message.getMessageHash() != null) {
@@ -393,9 +385,7 @@ public class MessageHelper {
             "Your Sent Messages Report", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    /**
-     * Main method to display all MessageHelper functionalities
-     */
+    
     public void showMessageHelperMenu() {
         String[] options = {
             "Display Senders/Recipients of Sent Messages",
@@ -452,9 +442,7 @@ public class MessageHelper {
         }
     }
     
-    /**
-     * Helper method to truncate long messages for display
-     */
+   
     private String truncateMessage(String message, int maxLength) {
         if (message.length() <= maxLength) {
             return message;

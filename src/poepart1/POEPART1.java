@@ -82,7 +82,7 @@ public class POEPART1 {
         String[] options = {
             "Send Messages", 
             "Show recently sent messages", 
-            "Message Helper Features",  // Add this option
+            "Message Helper Features",  
             "Quit"
         };
         
