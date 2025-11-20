@@ -333,7 +333,7 @@ public class MessageHelper {
         messageHash.removeIf(hash -> hash.equals(hashToDelete));
         
         if (deleted && deletedMessage != null) {
-            // Also remove from the main userMessages list if present
+      
             userMessages.removeIf(msg -> msg.getMessageHash().equals(hashToDelete));
             
             JOptionPane.showMessageDialog(null, 
